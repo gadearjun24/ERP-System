@@ -1,8 +1,15 @@
 import React from "react";
-import "./Dashboard.css";
+import AdminDashboard from "../../components/AdminDashboard/AdminDashboard";
 
-function Dashboard() {
-  return <div>Dashboard</div>;
+export default function Dashboard() {
+  const role = localStorage.getItem("role");
+  console.log(role);
+
+  switch (role) {
+    case "CollegeAdmin":
+      return <AdminDashboard />;
+
+    default:
+      break;
+  }
 }
-
-export default Dashboard;

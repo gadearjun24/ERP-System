@@ -8,6 +8,7 @@ const teacherSchema = new Schema(
     password: { type: String, required: true, unique: true, trim: true },
     branchCode: { type: String, trim: true },
     subjects: [String],
+    subjectCode: [String],
     role: {
       type: String,
       required: true,
@@ -25,6 +26,11 @@ const teacherSchema = new Schema(
       required: true,
       trim: true,
       ref: "TeacherAdmin",
+    },
+    subjectId: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "Subject",
     },
   },
   {
