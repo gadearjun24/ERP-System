@@ -8,7 +8,6 @@ exports.createCollegeAdmin = async (req, res) => {
 
     console.log(collegeAdminData);
 
-    // Hash the password before saving it to the database
     const hashedPassword = await bcrypt.hash(
       collegeAdminData.adminPassword,
       10
@@ -17,10 +16,10 @@ exports.createCollegeAdmin = async (req, res) => {
     collegeAdminData.adminPassword = hashedPassword;
 
     const collegeAdmin = new CollegeAdmin(collegeAdminData);
-    
+
     await collegeAdmin.save();
-    
-    console.log(collegeAdmin);
+
+    console.log({ collegeAdmin });
     res.status(201).json(collegeAdmin);
   } catch (err) {
     res.status(400).json("College already exists.");
@@ -32,9 +31,13 @@ exports.collegeAdminLogin = async (req, res) => {
   try {
     const collegeAdminData = req.body;
 
+    console.log(await CollegeAdmin.find({}));
+
     const collegeAdmin = await CollegeAdmin.findOne({
       adminEmail: collegeAdminData.email,
     });
+
+    console.log(collegeAdmin);
 
     if (!collegeAdmin) {
       return res.status(404).json("College admin not found");
@@ -66,13 +69,17 @@ exports.collegeAdminLogin = async (req, res) => {
   }
 };
 
-exports.findCollegeByCollegeEmail = async (req, res) => {
+exports.findCollegeByCollegeId = async (req, res) => {
   try {
-    const collegeEmail = req.query;
+    const { collegeId } = req.user;
+    console.log({ collegeId });
 
     const collegeAdminData = await CollegeAdmin.findOne({
-      collegeEmail: collegeEmail.collegeEmail,
+      _id: collegeId,
     });
+
+    console.log({ collegeAdminData });
+
     if (collegeAdminData) {
       res.status(200).json(collegeAdminData);
     } else {

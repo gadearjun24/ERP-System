@@ -1,6 +1,8 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { TeacherAdmin } = require("../models/teacherAdmin");
+const { CollegeAdmin } = require("../models/collegeAdmin");
+const { Teacher } = require("../models/teacher");
 
 exports.createTeacherAdmin = async (req, res) => {
   try {
@@ -17,6 +19,8 @@ exports.createTeacherAdmin = async (req, res) => {
       teacherAdmin: teacherAdmin,
     });
   } catch (err) {
+    console.log(err);
+
     res
       .status(400)
       .json({ message: "Teacher Admin already exists.", error: err });
@@ -43,12 +47,12 @@ exports.teacherAdminLogin = async (req, res) => {
     if (isPasswordValid) {
       const token = jwt.sign(
         {
-          id: teacherAdmin._id,
+          teacherAdminId: teacherAdmin._id,
           email: teacherAdmin.email,
           collegeId: teacherAdmin.collegeId,
         },
 
-        process.env.JWT_SECRET_KEY 
+        process.env.JWT_SECRET_KEY
       );
 
       res.status(200).json({
@@ -64,20 +68,38 @@ exports.teacherAdminLogin = async (req, res) => {
   }
 };
 
-
 exports.getAllAdminTeachers = async (req, res) => {
   try {
-    const { collegeId } = req.user; 
-    console.log(req.user);
-    
+    const { collegeId } = req.user;
+    console.log(req.user, collegeId);
 
-    const teachers = await TeacherAdmin.find({ collegeId: collegeId });
+    const collegeAdminData = await CollegeAdmin.find({ _id: collegeId });
+    const teacherAdminData = await TeacherAdmin.find({ collegeId: collegeId });
 
     res.status(200).json({
       message: "Teachers fetched successfully",
-      teachers: teachers,
+      teacherAdminData: teacherAdminData,
+      collegeAdminData: collegeAdminData,
     });
   } catch (err) {
     res.status(500).json({ message: "Error fetching teachers", error: err });
+  }
+};
+
+exports.findAdminTeacherById = async (req, res) => {
+  try {
+    const { teacherAdminId } = req.user;
+    console.log(req.user, teacherAdminId);
+    const teacherAdminData = await TeacherAdmin.findOne({
+      _id: teacherAdminId,
+    });
+
+    if (teacherAdminData) {
+      res.status(200).json(teacherAdminData);
+    } else {
+      res.status(404).json("Not found");
+    }
+  } catch (err) {
+    res.status(500).json("Serever Error");
   }
 };

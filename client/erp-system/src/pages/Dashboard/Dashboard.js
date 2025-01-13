@@ -1,5 +1,6 @@
 import React from "react";
-import AdminDashboard from "../../components/AdminDashboard/AdminDashboard";
+import CollegeAdminDashboard from "../../components/CollegeAdminDashboard/CollegeAdminDashboard";
+import TeacherAdminDashboard from "../../components/TeacherAdminDashboard/TeacherAdminDashboard";
 
 export default function Dashboard() {
   const role = localStorage.getItem("role");
@@ -7,7 +8,9 @@ export default function Dashboard() {
 
   switch (role) {
     case "CollegeAdmin":
-      return <AdminDashboard />;
+      return <CollegeAdminDashboard />;
+    case "TeacherAdmin":
+      return <TeacherAdminDashboard />;
 
     default:
       break;

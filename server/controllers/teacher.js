@@ -1,6 +1,8 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { Teacher } = require("../models/teacher");
+const { CollegeAdmin } = require("../models/collegeAdmin");
+const { TeacherAdmin } = require("../models/teacherAdmin");
 
 exports.createTeacher = async (req, res) => {
   try {
@@ -40,12 +42,39 @@ exports.teacherLogin = async (req, res) => {
     }
 
     const token = jwt.sign(
-      { teacherId: teacher._id, email: teacher.email },
+      {
+        teacherId: teacher._id,
+        email: teacher.email,
+        teacherAdminId: teacher.teacherAdminId,
+        subjectId: teacher.subjectId,
+      },
       process.env.JWT_SECRET_KEY
     );
 
     res.status(200).json({ msg: "Login successful", teacher, token });
   } catch (err) {
     res.status(500).json("Server error.");
+  }
+};
+
+exports.getAllTeachers = async (req, res) => {
+  try {
+    const { collegeId, teacherAdminId } = req.user;
+    console.log(req.user);
+
+    const collegeAdminData = await CollegeAdmin.find({ _id: collegeId });
+
+    const teacherAdminData = await TeacherAdmin.find({ _id: teacherAdminId });
+
+    const teacherData = await Teacher.find({ teacherAdminId: teacherAdminId });
+
+    res.status(200).json({
+      message: "Teachers fetched successfully",
+      teacherAdminData: teacherAdminData,
+      collegeAdminData: collegeAdminData,
+      teacherData: teacherData,
+    });
+  } catch (err) {
+    res.status(500).json({ message: "Error fetching teachers", error: err });
   }
 };

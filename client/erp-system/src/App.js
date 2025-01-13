@@ -5,6 +5,8 @@ import CollegeAdminSignupForm from "./pages/CollegeAdminSignupForm/CollegeAdminS
 import CollegeAdminSigninForm from "./pages/CollegeAdminSinginForm/CollegeAdminSinginForm";
 import Home from "./pages/Home/Home";
 import AddAdminTeacherForm from "./pages/AddAdminTeacherForm/AddAdminTeacherForm";
+import TeacherAdminSingin from "./pages/TeacherAdminSingin/TeacherAdminSingin";
+import AddSubjects from "./pages/AddSubjects/AddSubjects";
 
 function App() {
   // const location = useLocation();
@@ -25,7 +27,17 @@ function App() {
 
       <Route path="/dashboard" element={<Dashboard />}></Route>
 
-      <Route path="/add-admin-teacher" element={<AddAdminTeacherForm />}></Route>
+      <Route
+        path="/add-admin-teacher"
+        element={<AddAdminTeacherForm />}
+      ></Route>
+
+      <Route
+        path="/teacher-admin-signin"
+        element={<TeacherAdminSingin />}
+      ></Route>
+
+      <Route path="/add-subject" element={<AddSubjects />}></Route>
     </Routes>
   );
 }

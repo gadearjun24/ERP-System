@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./CollegeAdminSignupForm.css";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function CollegeAdminSignupForm() {
   const navigate = useNavigate();
@@ -33,7 +33,7 @@ function CollegeAdminSignupForm() {
       );
       if (response.status === 201) {
         alert("Sign up successfull.");
-        
+
         navigate("/college-admin-signin");
       } else {
         alert("Error while registration try later.");
@@ -41,6 +41,7 @@ function CollegeAdminSignupForm() {
       console.log("Form submitted:", response.data);
     } catch (error) {
       console.error(error);
+      console.log(error);
       alert(error?.response?.data);
     }
   };
@@ -148,6 +149,11 @@ function CollegeAdminSignupForm() {
         <button type="submit" className="signup-btn">
           Sign Up
         </button>
+
+        <p>
+          Already have an account?
+          <Link to={"/college-admin-signin"}> Sign In</Link>
+        </p>
       </form>
     </div>
   );

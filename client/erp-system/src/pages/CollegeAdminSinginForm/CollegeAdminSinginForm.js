@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import "./CollegeAdminSigninForm.css";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import userDataContext from "../../context/userDataContext";
 
 function CollegeAdminSigninForm() {
@@ -25,10 +25,13 @@ function CollegeAdminSigninForm() {
     e.preventDefault();
 
     try {
+      console.log(formData);
+      
       const response = await axios.post(
         "https://scaling-robot-pjr77r7jpgrvh6g46-8080.app.github.dev/college-admin-login",
         formData
       );
+      console.log(formData);
 
       if (+response.status === 200) {
         alert("Login successful!");
@@ -41,7 +44,7 @@ function CollegeAdminSigninForm() {
         localStorage.setItem("role", response?.data?.collegeAdmin?.role);
         localStorage.setItem("college_admin_token", response?.data?.token);
         console.log(response?.data?.token);
-        
+
         navigate("/dashboard");
       }
     } catch (error) {
@@ -89,6 +92,10 @@ function CollegeAdminSigninForm() {
         <button type="submit" className="signin-btn">
           Sign In
         </button>
+        <p>
+          Don’t have an account?
+          <Link to={"/college-admin-signup"}> Sign Up</Link>
+        </p>
       </form>
     </div>
   );

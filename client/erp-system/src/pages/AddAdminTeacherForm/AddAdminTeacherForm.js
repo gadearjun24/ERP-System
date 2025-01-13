@@ -1,20 +1,20 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./AddAdminTeacherForm.css";
 import userDataContext from "../../context/userDataContext";
 import axios from "axios";
 
 function AddAdminTeacherForm() {
-  const { userData } = useContext(userDataContext);
+  const { userData, setUserData } = useContext(userDataContext);
   const token = localStorage.getItem("college_admin_token");
 
-  console.log(userData);
+  // console.log(userData);
 
   const [teacherDetails, setTeacherDetails] = useState({
     name: "",
     email: "",
     password: "",
     branchCode: "",
-    collegeId: userData?._id,
+    collegeId: "",
   });
 
   const handleChange = (e) => {
@@ -25,14 +25,40 @@ function AddAdminTeacherForm() {
     });
   };
 
+  useEffect(() => {
+    async function getCollegeAdminData(token) {
+      try {
+        const response = await axios.get(
+          "https://scaling-robot-pjr77r7jpgrvh6g46-8080.app.github.dev/get-college",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setUserData(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    getCollegeAdminData(token);
+  }, [token]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(userData);
+
+    const updatedTeacherDetails = {
+      ...teacherDetails,
+      collegeId: userData?._id,
+    };
+
+    console.log(updatedTeacherDetails);
 
     try {
       const response = await axios.post(
         "https://scaling-robot-pjr77r7jpgrvh6g46-8080.app.github.dev/teacher-admin",
-        teacherDetails
+        updatedTeacherDetails
       );
       console.log(response.data);
       alert(response.data.message);
@@ -41,7 +67,7 @@ function AddAdminTeacherForm() {
       alert(err?.response?.data?.message);
     }
 
-    console.log("Teacher added:", teacherDetails);
+    console.log("Teacher added:", updatedTeacherDetails);
   };
 
   return (

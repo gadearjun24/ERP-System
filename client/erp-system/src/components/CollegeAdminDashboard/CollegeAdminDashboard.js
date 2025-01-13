@@ -1,19 +1,21 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
-import "./AdminDashboard.css"; // Import CSS file for styling
+import "./CollegeAdminDashboard.css"; // Import CSS file for styling
 import axios from "axios";
+import userDataContext from "../../context/userDataContext";
 
-function AdminDashboard() {
+function CollegeAdminDashboard() {
   const [teacherData, setTeacherData] = useState([]);
   const [studentCount, setStudentCount] = useState(0);
+  const { setUserData } = useContext(userDataContext);
 
   const token = localStorage.getItem("college_admin_token");
 
   useEffect(() => {
     async function fetchAdminTeacherAndStudentData(token) {
       try {
-        console.log({token});
-        
+        console.log({ token });
+
         const response = await axios.get(
           "https://scaling-robot-pjr77r7jpgrvh6g46-8080.app.github.dev/admin-teachers",
           {
@@ -22,7 +24,10 @@ function AdminDashboard() {
             },
           }
         );
-        console.log({ response });
+        // console.log(response.data.teachers);
+        setTeacherData(response.data.teacherAdminData);
+        setUserData(response.data.collegeAdminData);
+        console.log({ teacherData });
       } catch (err) {
         console.log({ err });
       }
@@ -30,16 +35,13 @@ function AdminDashboard() {
     fetchAdminTeacherAndStudentData(token);
   }, [token]);
 
-  const handleRemoveTeacher = (teacherId) => {
-    // Call API to remove teacher
-    fetch(`/api/removeTeacher/${teacherId}`, { method: "DELETE" })
-      .then((res) => res.json())
-      .then((data) => {
-        alert("Teacher removed successfully");
-        setTeacherData(
-          teacherData.filter((teacher) => teacher._id !== teacherId)
-        ); // Update local state
-      });
+  const handleRemoveTeacher = async (teacherId) => {
+    console.log(teacherId);
+    setTeacherData(() =>
+      teacherData.filter((teacher) => teacher._id !== teacherId)
+    );
+
+    console.log(teacherData);
   };
 
   return (
@@ -55,7 +57,7 @@ function AdminDashboard() {
 
       <div className="teacher-list">
         <h3>Admin Teachers</h3>
-        {teacherData.map((teacher) => (
+        {teacherData?.map((teacher) => (
           <div key={teacher._id} className="teacher-item">
             <span>
               {teacher.name} ({teacher.email})
@@ -73,4 +75,4 @@ function AdminDashboard() {
   );
 }
 
-export default AdminDashboard;
+export default CollegeAdminDashboard;
