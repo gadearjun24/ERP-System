@@ -44,19 +44,26 @@ function AddSubjects() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    try {
+      e.preventDefault();
 
-    const updatedSubjectDetails = {
-      ...subjectDetails,
-      teacherAdminId: userData._id,
-    };
+      const updatedSubjectDetails = {
+        ...subjectDetails,
+        teacherAdminId: userData._id,
+      };
 
-    const response = await axios.post(
-      "https://scaling-robot-pjr77r7jpgrvh6g46-8080.app.github.dev/subject"
-    );
+      console.log({ updatedSubjectDetails });
 
-    console.log("Subject Added:", subjectDetails, updatedSubjectDetails);
-    // Add your logic to send the subject data to the backend API
+      const response = await axios.post(
+        "https://scaling-robot-pjr77r7jpgrvh6g46-8080.app.github.dev/subject",
+        updatedSubjectDetails
+      );
+      console.log(response.data);
+      alert(response.data);
+    } catch (err) {
+      console.log(err);
+      alert(err?.response?.data);
+    }
   };
 
   return (

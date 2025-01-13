@@ -62,9 +62,11 @@ exports.getAllTeachers = async (req, res) => {
     const { collegeId, teacherAdminId } = req.user;
     console.log(req.user);
 
-    const collegeAdminData = await CollegeAdmin.find({ _id: collegeId });
+    const collegeAdminData = await CollegeAdmin.findOne({ _id: collegeId });
 
-    const teacherAdminData = await TeacherAdmin.find({ _id: teacherAdminId });
+    const teacherAdminData = await TeacherAdmin.findOne({
+      _id: teacherAdminId,
+    });
 
     const teacherData = await Teacher.find({ teacherAdminId: teacherAdminId });
 

@@ -65,3 +65,38 @@
 .teacher-admin-dashboard .button-link {
   text-decoration: none;
 }
+
+.dropdown-container {
+  max-width: 400px;
+  margin: 50px auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.dropdown-container h2 {
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.dropdown-container .dropdown {
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 100%;
+  background-color: #fff;
+}
+
+.dropdown-container .dropdown option {
+  padding: 10px;
+}
+
+.dropdown-container p {
+  font-size: 1.1rem;
+  color: #555;
+  margin-top: 20px;
+}

@@ -2,7 +2,10 @@ const { Student } = require("../models/student");
 
 exports.createStudent = async (req, res) => {
   try {
+
     const studentData = req.body;
+    console.log(studentData);
+    
     const student = new Student(studentData);
     await student.save();
 
